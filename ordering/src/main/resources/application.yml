@@ -1,0 +1,35 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders_db
+    username: catarina
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  school:
+    redis:
+      ttl-in-millis: 25000
+    rabbit:
+      url: localhost
+      port: 5672
+      username: catarina
+      password: 12345
+      connection-timeout: 60
+      queues:
+        - SELLER
+        - ORDERING
+      max-concurrent-consumer: 50
+      retry-interval: 60000
