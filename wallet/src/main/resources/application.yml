@@ -1,14 +1,38 @@
 server:
-  port: 8084
+  port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/wallet_db
+    url: jdbc:postgresql://localhost:5433/marketplace_wallets
     username: catarina
     password: 12345
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      password: 12345
+      port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: catarina
+    password: 12345
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  school:
+    redis:
+      ttl-in-millis: 25000
+
+    queue:
+      seller: SELLER
+      ordering: ORDERING

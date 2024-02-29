@@ -69,9 +69,12 @@ public class CategoryService {
         repository.save(category.get());
     }
 
-    //public void deleteCategory(Integer id) {
-    //    Optional<Category> category = repository.findById(id);
-    //    validateCategoryNotFound(category, id, " not found!");
-    //    repository.delete(category.get());
-    //}
+    public void disableCategory(Integer id) {
+        Optional<Category> category = repository.findById(id);
+        validateCategoryNotFound(category, id, " not found!");
+
+        category.get().setIsDisabled(true);
+
+        repository.save(category.get());
+    }
 }

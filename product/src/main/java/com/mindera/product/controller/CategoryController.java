@@ -48,11 +48,11 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    //@DeleteMapping("/{id}")
-    //public ResponseEntity<Void> deleteCategory(@PathVariable Integer id) {
-    //    service.deleteCategory(id);
-    //    return ResponseEntity.status(HttpStatus.OK).build();
-    //}
+    @PatchMapping("/disable/{id}")
+    public ResponseEntity<Void> disableCategory(@PathVariable Integer id) {
+        service.disableCategory(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     @ExceptionHandler(CategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

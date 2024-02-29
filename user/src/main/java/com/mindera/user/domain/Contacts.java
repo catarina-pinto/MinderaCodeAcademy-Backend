@@ -1,5 +1,6 @@
 package com.mindera.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mindera.user.domain.Address;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,10 +14,8 @@ import java.util.Set;
 @Builder
 @Embeddable
 public class Contacts {
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
     private String phoneNumber;
-    @OneToMany(mappedBy = "user")
-    private Set<Address> addresses;
 }

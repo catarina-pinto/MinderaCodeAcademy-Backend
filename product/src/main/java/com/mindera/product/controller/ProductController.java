@@ -1,9 +1,11 @@
 package com.mindera.product.controller;
 
+import com.mindera.product.domain.Category;
 import com.mindera.product.exception.ProductAlreadyExistsException;
 import com.mindera.product.exception.ProductNotFoundException;
 import com.mindera.product.domain.Product;
 import com.mindera.product.service.ProductService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<Product>> getAllProducts(@RequestParam(required = false) String name, @RequestParam(required = false) Integer sellerId, @RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Float price) {
+        return ResponseEntity.ok(service.getAll(name, sellerId, categoryId, price));
     }
 
     @GetMapping("/{id}")

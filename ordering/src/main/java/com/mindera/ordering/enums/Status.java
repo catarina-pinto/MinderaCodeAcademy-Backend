@@ -1,8 +1,8 @@
 package com.mindera.ordering.enums;
 
 public enum Status {
-    Cart,
-    Opened,
-    Finished,
-    Canceled;
+    CART,
+    OPENED,
+    FINISHED,
+    CANCELED;
 }

@@ -1,5 +1,7 @@
 package com.mindera.ordering.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mindera.ordering.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +22,7 @@ public class Order {
     @Column
     private Integer userId;
     @OneToMany(mappedBy = "order")
+    @JsonManagedReference
     private Set<OrderItem> items;
     @Column
     private Float totalValue;

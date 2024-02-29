@@ -1,5 +1,6 @@
 package com.mindera.user.controller;
 
+import com.mindera.user.message.SellerSender;
 import com.mindera.user.model.QueueMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/message")
 @RequiredArgsConstructor
 public class MessageController {
-    private final RabbitTemplate rabbitTemplate;
+    private final SellerSender sellerSender;
 
     @GetMapping
-    public void publishMessage(@RequestParam String queueName, @RequestParam String queueMessage) {
-        rabbitTemplate.convertAndSend(queueName, new QueueMessage(queueMessage));
+    public void publishMessage(@RequestParam String queueMessage) {
+        sellerSender.send(queueMessage);
     }
 }

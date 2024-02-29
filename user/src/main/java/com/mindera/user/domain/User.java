@@ -1,8 +1,11 @@
 package com.mindera.user.domain;
 
-import com.mindera.user.enums.UserType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mindera.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,7 +20,7 @@ public class User {
     private Integer id;
     @Column
     private String name;
-    @Column
+    @Column(unique = true)
     private String username;
     @Column
     private String password;
@@ -26,5 +29,8 @@ public class User {
     @Column
     private String fiscalNumber;
     @Column
-    private UserType type;
+    private Role role;
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private Set<Address> addresses;
 }

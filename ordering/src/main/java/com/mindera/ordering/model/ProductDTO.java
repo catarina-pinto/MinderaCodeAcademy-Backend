@@ -1,22 +1,15 @@
 package com.mindera.ordering.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
+@Builder
 public class ProductDTO {
     private Integer id;
-    private String name;
-    private String description;
-    private Float price;
-    private Float promotion;
-    private Integer sellerId;
-    private CategoryDTO category;
-    private Float vat;
+    private Float finalPrice;
     private Integer stock;
 }

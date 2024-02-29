@@ -3,6 +3,7 @@ package com.mindera.ordering.controller;
 import com.mindera.ordering.exception.OrderAlreadyExistsException;
 import com.mindera.ordering.exception.OrderNotFoundException;
 import com.mindera.ordering.domain.Order;
+import com.mindera.ordering.exception.QuantityExceedsStockException;
 import com.mindera.ordering.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class OrderController {
         this.service = service;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/add-product")
     public ResponseEntity<Void> addToCart(Integer userId, Integer productId, Integer quantity) {
         service.addProductToCart(userId, productId, quantity);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -37,8 +38,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> addOrder(@RequestBody Order order) {
-        Order toAdd = service.addOne(order);
+    public ResponseEntity<Order> addOrder(@RequestBody Order order, @RequestParam Integer userId) {
+        Order toAdd = service.addOne(order, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(toAdd);
     }
 
@@ -62,7 +63,7 @@ public class OrderController {
 
     @ExceptionHandler(OrderNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Error> handleProductNotFound(OrderNotFoundException ex) {
+    public ResponseEntity<Error> handleOrderNotFound(OrderNotFoundException ex) {
         Error error = new Error();
         error.setErrorCode(HttpStatus.NOT_FOUND.value());
         error.setMessage(ex.getMessage());
@@ -71,10 +72,19 @@ public class OrderController {
 
     @ExceptionHandler(OrderAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Error> handleProductAlreadyExists(OrderAlreadyExistsException ex) {
+    public ResponseEntity<Error> handleOrderAlreadyExists(OrderAlreadyExistsException ex) {
         Error error = new Error();
         error.setErrorCode(HttpStatus.CONFLICT.value());
         error.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(QuantityExceedsStockException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Error> handleQuantityExceedsStock(QuantityExceedsStockException ex) {
+        Error error = new Error();
+        error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

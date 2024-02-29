@@ -14,25 +14,9 @@ import java.util.List;
 public class AppProperties {
     private Redis redis;
 
-    private Rabbit rabbit;
-
     @Getter
     @Setter
     public static class Redis {
         private Integer ttlInMillis = 30000;
     }
-
-    @Getter
-    @Setter
-    public static class Rabbit {
-        private String url;
-        private Integer port;
-        private String username;
-        private String password;
-        private Integer connectionTimeout = 100;
-        private List<String> queues;
-        private Integer maxConcurrentConsumer;
-        private Integer retryInterval;
-    }
-
 }

@@ -1,0 +1,294 @@
+version: "3.9"
+
+networks:
+  default_net:
+    name: default_net
+    driver: bridge
+
+volumes:
+  database-store:
+    driver: local
+
+services:
+  app-user:
+    container_name: app-users
+    build:
+      context: "./user"
+    ports:
+      - 8090:8080
+    depends_on:
+      - database-user
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-user
+      DB_PORT: 5432
+      DB_NAME: marketplace_users
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-user:
+    image: postgres:13
+    container_name: database-user
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_users
+    networks:
+      - default_net
+
+  app-wallet:
+    container_name: app-wallets
+    build:
+      context: "./wallet"
+    ports:
+      - 8091:8080
+    depends_on:
+      - database-wallet
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-wallet
+      DB_PORT: 5432
+      DB_NAME: marketplace_wallets
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-wallet:
+    image: postgres:13
+    container_name: database-wallet
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_wallets
+    networks:
+      - default_net
+
+  app-product:
+    container_name: app-products
+    build:
+      context: "./product"
+    ports:
+      - 8092:8080
+    depends_on:
+      - database-product
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-product
+      DB_PORT: 5432
+      DB_NAME: marketplace_products
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-product:
+    image: postgres:13
+    container_name: database-product
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_products
+    networks:
+      - default_net
+
+  app-payment:
+    container_name: app-payments
+    build:
+      context: "./payment"
+    ports:
+      - 8093:8080
+    depends_on:
+      - database-payment
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-payment
+      DB_PORT: 5432
+      DB_NAME: marketplace_payments
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-payment:
+    image: postgres:13
+    container_name: database-payment
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_payments
+    networks:
+      - default_net
+
+  app-ordering:
+    container_name: app-orders
+    build:
+      context: "./ordering"
+    ports:
+      - 8094:8080
+    depends_on:
+      - database-ordering
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-ordering
+      DB_PORT: 5432
+      DB_NAME: marketplace_orders
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-ordering:
+    image: postgres:13
+    container_name: database-ordering
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5436:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_orders
+    networks:
+      - default_net
+
+  app-discount:
+    container_name: app-discounts
+    build:
+      context: "./discount"
+    ports:
+      - 8095:8080
+    depends_on:
+      - database-discount
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-discount
+      DB_PORT: 5432
+      DB_NAME: marketplace_discounts
+      DB_USER: catarina
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-marketplace
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-marketplace
+      RABBIT_PORT: 5672
+      RABBIT_USER: catarina
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database-discount:
+    image: postgres:13
+    container_name: database-discount
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5437:5432
+    environment:
+      POSTGRES_USER: catarina
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: marketplace_discounts
+    networks:
+      - default_net
+
+  rabbitmq:
+    image: rabbitmq:3.12.12-management
+    container_name: rabbitmq-marketplace
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: catarina
+      RABBITMQ_DEFAULT_PASS: 12345
+    volumes:
+      - database-store:/rabbitmq
+    networks:
+      - default_net
+
+  redis:
+    image: redis:6.2.6
+    container_name: redis-marketplace
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning --requirepass 12345 # eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - database-store:/redis
+    networks:
+      - default_net

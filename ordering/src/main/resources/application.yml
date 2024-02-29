@@ -1,8 +1,8 @@
 server:
-  port: 8082
+  port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/orders_db
+    url: jdbc:postgresql://localhost:5436/marketplace_orders
     username: catarina
     password: 12345
   jpa:
@@ -12,7 +12,17 @@ spring:
   data:
     redis:
       host: localhost
+      password: 12345
       port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: catarina
+    password: 12345
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
 
 springdoc:
   swagger-ui:
@@ -22,14 +32,7 @@ app:
   school:
     redis:
       ttl-in-millis: 25000
-    rabbit:
-      url: localhost
-      port: 5672
-      username: catarina
-      password: 12345
-      connection-timeout: 60
-      queues:
-        - SELLER
-        - ORDERING
-      max-concurrent-consumer: 50
-      retry-interval: 60000
+    
+    queue:
+      seller: SELLER
+      ordering: ORDERING 

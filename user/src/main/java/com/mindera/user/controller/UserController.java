@@ -1,5 +1,6 @@
 package com.mindera.user.controller;
 
+import com.mindera.user.enums.Role;
 import com.mindera.user.exception.UserAlreadyExistsException;
 import com.mindera.user.exception.UserNotFoundException;
 import com.mindera.user.domain.User;
@@ -20,9 +21,14 @@ public class UserController {
         this.service = service;
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestHeader("Authorization") String authorization) {
+        return ResponseEntity.ok(service.loginUser(authorization));
+    }
+
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) Integer id, @RequestParam(required = false) Role role, @RequestParam(required = false) String country, @RequestParam(required = false) String city) {
+        return ResponseEntity.ok(service.getAll(id, role, country, city));
     }
 
     @GetMapping("/{id}")
@@ -65,7 +71,7 @@ public class UserController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Error> handleUserConflict(UserAlreadyExistsException ex) {
+    public ResponseEntity<Error> handleUserAlreadyExists(UserAlreadyExistsException ex) {
         Error error = new Error();
         error.setErrorCode(HttpStatus.CONFLICT.value());
         error.setMessage(ex.getMessage());

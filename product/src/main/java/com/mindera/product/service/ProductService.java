@@ -29,8 +29,12 @@ public class ProductService {
         return product.get();
     }
 
-    public List<Product> getAll() {
-        return repository.findAll();
+    public List<Product> getAll(String name, Integer sellerId, Integer categoryId, Float price) {
+        if (isNull(name) && isNull(sellerId) && isNull(categoryId) && isNull(price)) {
+            return repository.findAll();
+        }
+
+        return repository.findByNameAndSellerIdAndCategoryIdAndPrice(name, sellerId, categoryId, price);
     }
 
     public Product addOne(Product product) {
@@ -51,6 +55,7 @@ public class ProductService {
     }
 
     public void partiallyUpdateProduct(Integer id, Product toUpdate) {
+        System.out.println(toUpdate.getStock() + "-----------");
         Optional<Product> product = repository.findById(id);
         validateProductNotFound(repository.findById(id), id, " not found!");
 
@@ -66,12 +71,9 @@ public class ProductService {
             product.get().setCategory(toUpdate.getCategory());
         }
 
-        if (!isNull(toUpdate.getPrice())) {
-            product.get().setPrice(toUpdate.getPrice());
-        }
-
-        if (!isNull(toUpdate.getPromotion())) {
-            product.get().setPromotion(toUpdate.getPromotion());
+        if (!isNull(toUpdate.getBasePrice())) {
+            product.get().setBasePrice(toUpdate.getBasePrice());
+            product.get().setFinalPrice();
         }
 
         if (!isNull(toUpdate.getSellerId())) {
@@ -79,14 +81,27 @@ public class ProductService {
         }
 
         if (!isNull(toUpdate.getStock())) {
+            System.out.println("entra aqui");
             product.get().setStock(toUpdate.getStock());
+            System.out.println(product.get().getStock() + "........" + toUpdate.getStock());
         }
 
         if (!isNull(toUpdate.getVat())) {
             product.get().setVat(toUpdate.getVat());
         }
 
+        if (!isNull(toUpdate.getDiscountIsActive())) {
+            product.get().setDiscountIsActive(toUpdate.getDiscountIsActive());
+            product.get().setFinalPrice();
+        }
+
+        if (!isNull(toUpdate.getDiscount())) {
+            product.get().setDiscount(toUpdate.getDiscount());
+            product.get().setFinalPrice();
+        }
+
         repository.save(product.get());
+        System.out.println("Chega até aqui ?");
     }
 
     public void deleteProduct(Integer id) {
